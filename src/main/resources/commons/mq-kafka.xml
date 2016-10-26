@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--Kafka生产者-->
+    <bean id="demoProducer" class="cn.zb.commons.mq.kafka.KafkaProducer">
+        <constructor-arg index="0">
+            <props>
+                <prop key="bootstrap.servers">${kafka.bootstrap.servers}</prop>
+                <prop key="acks">all</prop>
+                <prop key="retries">0</prop>
+                <prop key="batch.size">16384</prop>
+                <prop key="linger.ms">1</prop>
+                <prop key="buffer.memory">33554432</prop>
+                <prop key="key.serializer">org.apache.kafka.common.serialization.StringSerializer</prop>
+                <prop key="value.serializer">org.apache.kafka.common.serialization.StringSerializer</prop>
+            </props>
+        </constructor-arg>
+    </bean>
+
+    <!--Kafka消费者-->
+    <bean id="demoConsumer" class="cn.zb.commons.mq.kafka.ConsumerMain" init-method="start">
+        <constructor-arg>
+            <props>
+                <prop key="bootstrap.servers">${kafka.bootstrap.servers}</prop>
+                <prop key="enable.auto.commit">false</prop>
+                <prop key="auto.commit.interval.ms">1000</prop>
+                <prop key="session.timeout.ms">30000</prop>
+                <prop key="key.deserializer">org.apache.kafka.common.serialization.StringDeserializer</prop>
+                <prop key="value.deserializer">org.apache.kafka.common.serialization.StringDeserializer</prop>
+            </props>
+        </constructor-arg>
+    </bean>
+</beans>
